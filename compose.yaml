@@ -1,0 +1,40 @@
+services:
+  firefox:
+    image: firefox:${VERSION:-latest}
+    build:
+      context: ./docker
+      dockerfile: Dockerfile
+      args:
+        - VERSION=${VERSION}
+    environment:
+      - DISPLAY=${DISPLAY}
+      - XAUTHORITY=/tmp/.Xauthority
+    security_opt:
+      - apparmor:unconfined
+    volumes:
+      # X11 server socket and authority
+      - /tmp/.X11-unix:/tmp/.X11-unix
+      - ${XAUTHORITY}:/tmp/.Xauthority:ro
+      # D-Bus session configuration file
+      - /usr/share/dbus-1/session.conf:/usr/share/dbus-1/session.conf
+      # Mount special files
+      - /dev/dri:/dev/dri
+      - /dev/snd:/dev/snd
+      - /var/run/dbus/:/var/run/dbus/
+      # Allow the container to inspect the hostname
+      - /var/run/docker.sock:/var/run/docker.sock
+      # Configuration files and local data
+      - firefox-config:/app/data
+    privileged: true
+    networks:
+      - firefox-internal
+    restart: "no"
+    scale: 1
+
+volumes:
+  firefox-config:
+
+networks:
+  firefox-internal:
+    external: true
+    name: firefox-internal
