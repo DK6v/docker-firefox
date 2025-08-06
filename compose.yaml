@@ -26,8 +26,6 @@ services:
       # Configuration files and local data
       - firefox-config:/app/data
     privileged: true
-    networks:
-      - firefox-internal
     restart: "no"
     scale: 1
 
@@ -35,6 +33,5 @@ volumes:
   firefox-config:
 
 networks:
-  firefox-internal:
-    external: true
-    name: firefox-internal
+  default:
+    name: docker-internal

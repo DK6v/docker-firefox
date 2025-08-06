@@ -43,5 +43,6 @@ su "$USER" -s /bin/bash -c " \
     firefox -CreateProfile 'default $PROFILE'
   fi
   echo '--- START FIREFOX ($PROFILE) ---'
-  firefox -profile '$PROFILE' --no-remote
+  # firefox -profile '$PROFILE' --no-remote
+  firefox --private-window
 "
